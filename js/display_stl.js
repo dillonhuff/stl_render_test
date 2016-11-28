@@ -31,7 +31,9 @@ function init() {
     controls.addEventListener( 'change', render );
 
     scene = new THREE.Scene();
-    scene.fog = new THREE.Fog( 0xfefefe, 2, 15 ); //new THREE.Fog( 0x72645b, 2, 15 );
+
+    var fog_color = 0xfefefe;
+    //scene.fog = new THREE.Fog( fog_color, 2, 15 ); //new THREE.Fog( 0x72645b, 2, 15 );
 
 
     // Ground
@@ -46,7 +48,7 @@ function init() {
 
     plane.receiveShadow = true;
 
-    scene.add( plane );
+//    scene.add( plane );
 
 
 
@@ -75,10 +77,11 @@ function init() {
     var file_1 = './models/pr2_head_pan.stl';
     var file_2 = './models/pr2_head_tilt.stl';
     var file_3 = './models/colored.stl';
+    var il70_part = './models/IL70\ -\ Case\ -\ Case.stl';
     
     var material = new THREE.MeshPhongMaterial( { color: 0xAAAAAA, specular: 0x111111, shininess: 200 } );
 
-    loader.load( file_1, function ( geometry ) {
+    loader.load( il70_part, function ( geometry ) {
 
 	var mesh = new THREE.Mesh( geometry, material );
 
@@ -134,13 +137,13 @@ function init() {
 
     scene.add( new THREE.HemisphereLight( 0x000000, 0xdddddd ) ); //0xdddddd, 0xdddddd )); //0x111122)); //0x443333, 0x111122 ) );
 
-    addShadowedLight( 1, 1, 1, 0xffffff, 1.35 );
-    addShadowedLight( 0.5, 1, -1, 0xffffff); //0xffaa00, 1 );
+    addShadowedLight( 10, 10, 10, 0xffffff, 1.35 );
+    addShadowedLight( 5, 10, -10, 0xffffff); //0xffaa00, 1 );
 
     // renderer
 
     renderer = new THREE.WebGLRenderer( { antialias: true } );
-    renderer.setClearColor( scene.fog.color );
+    renderer.setClearColor( fog_color );
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
 
