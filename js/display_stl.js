@@ -31,14 +31,15 @@ function init() {
     controls.addEventListener( 'change', render );
 
     scene = new THREE.Scene();
-    scene.fog = new THREE.Fog( 0x72645b, 2, 15 );
+    scene.fog = new THREE.Fog( 0xfefefe, 2, 15 ); //new THREE.Fog( 0x72645b, 2, 15 );
 
 
     // Ground
 
     var plane = new THREE.Mesh(
 	new THREE.PlaneBufferGeometry( 40, 40 ),
-	new THREE.MeshPhongMaterial( { color: 0x999999, specular: 0x101010 } )
+	new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x101010, shininess: 400 } )
+	//new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x101010 } )
     );
     plane.rotation.x = -Math.PI/2;
     plane.position.y = -0.5;
@@ -127,10 +128,10 @@ function init() {
 
     // Lights
 
-    scene.add( new THREE.HemisphereLight( 0x443333, 0x111122 ) );
+    scene.add( new THREE.HemisphereLight( 0x000000, 0xdddddd ) ); //0xdddddd, 0xdddddd )); //0x111122)); //0x443333, 0x111122 ) );
 
     addShadowedLight( 1, 1, 1, 0xffffff, 1.35 );
-    addShadowedLight( 0.5, 1, -1, 0xffaa00, 1 );
+    addShadowedLight( 0.5, 1, -1, 0xffffff); //0xffaa00, 1 );
 
     // renderer
 
