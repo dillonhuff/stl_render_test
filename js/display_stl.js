@@ -72,9 +72,13 @@ function init() {
 
     // Binary files
 
+    var file_1 = './models/pr2_head_pan.stl';
+    var file_2 = './models/pr2_head_tilt.stl';
+    var file_3 = './models/colored.stl';
+    
     var material = new THREE.MeshPhongMaterial( { color: 0xAAAAAA, specular: 0x111111, shininess: 200 } );
 
-    loader.load( './models/pr2_head_pan.stl', function ( geometry ) {
+    loader.load( file_1, function ( geometry ) {
 
 	var mesh = new THREE.Mesh( geometry, material );
 
@@ -89,7 +93,7 @@ function init() {
 
     } );
 
-    loader.load( './models/pr2_head_tilt.stl', function ( geometry ) {
+    loader.load( file_2, function ( geometry ) {
 
 	var mesh = new THREE.Mesh( geometry, material );
 
@@ -105,7 +109,7 @@ function init() {
     } );
 
     // Colored binary STL
-    loader.load( './models/colored.stl', function ( geometry ) {
+    loader.load( file_3, function ( geometry ) {
 
 	var meshMaterial = material;
 	if (geometry.hasColors) {
