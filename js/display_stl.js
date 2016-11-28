@@ -3,7 +3,8 @@ if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
 var container, stats;
 
-var camera, cameraTarget, scene, renderer;
+// NOTE: cameraTarget will not be needed once trackball controls are used
+var camera, cameraTarget, scene, renderer, controls;
 
 init();
 animate();
@@ -16,7 +17,18 @@ function init() {
     camera = new THREE.PerspectiveCamera( 35, window.innerWidth / window.innerHeight, 1, 15 );
     camera.position.set( 3, 0.15, 3 );
 
-    cameraTarget = new THREE.Vector3( 0, -0.25, 0 );
+    //cameraTarget = new THREE.Vector3( 0, -0.25, 0 );
+
+    controls = new THREE.TrackballControls( camera );
+    controls.rotateSpeed = 1.0;
+    controls.zoomSpeed = 1.2;
+    controls.panSpeed = 0.8;
+    controls.noZoom = false;
+    controls.noPan = false;
+    controls.staticMoving = true;
+    controls.dynamicDampingFactor = 0.0;
+    controls.keys = [ 65, 83, 68 ];
+    controls.addEventListener( 'change', render );
 
     scene = new THREE.Scene();
     scene.fog = new THREE.Fog( 0x72645b, 2, 15 );
@@ -176,6 +188,10 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
 
     renderer.setSize( window.innerWidth, window.innerHeight );
+    controls.handleResize();
+    render();
+    
+//    renderer.setSize( window.innerWidth, window.innerHeight );
 
 }
 
@@ -185,19 +201,21 @@ function animate() {
 
     render();
     stats.update();
+    controls.update();
 
 }
 
 function render() {
 
-    var timer = Date.now() * 0.0005;
+    // var timer = Date.now() * 0.0005;
 
-    camera.position.x = Math.cos( timer ) * 3;
-    camera.position.z = Math.sin( timer ) * 3;
+    // camera.position.x = Math.cos( timer ) * 3;
+    // camera.position.z = Math.sin( timer ) * 3;
 
-    camera.lookAt( cameraTarget );
+    // camera.lookAt( cameraTarget );
 
     renderer.render( scene, camera );
+    stats.update();
 
 }
 
