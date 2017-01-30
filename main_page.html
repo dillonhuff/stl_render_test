@@ -13,7 +13,7 @@
 			}
 
 			#info {
-				color: #fff;
+			color: #fff;
 				position: absolute;
 				top: 10px;
 				width: 100%;
@@ -22,6 +22,12 @@
 				display:block;
 
 			}
+
+			#commands {
+			position: absolute; /*or fixed*/
+			top:100px;
+			left: 0px;
+			}			
 
 			a { color: skyblue }
 			.button { background:#999; color:#eee; padding:0.2em 0.5em; cursor:pointer }
@@ -37,19 +43,21 @@
 		</style>
 	</head>
 	<body>
-		<div id="info">
-			<a href="http://threejs.org" target="_blank">three.js</a> -
-			STL loader test by <a href="https://github.com/aleeper">aleeper</a>. PR2 head from <a href="http://www.ros.org/wiki/pr2_description">www.ros.org</a>
-		</div>
+	  <div id="commands">
 
-		<script src="js/three.js"></script>
+	    <input type="file" class="file" id="attachement" name="attachement" style="display: none;" onchange="fileSelected(this)"/>
+	    <input type="button" class="file" id="btnAttachment" onclick="openAttachment()" value="File"/>		  
 
-		<script src="js/TrackballControls.js"></script>
-		<script src="js/STLLoader.js"></script>
+	  </div>
 
-		<script src="js/Detector.js"></script>
-		<script src="js/stats.min.js"></script>
-		<script src="js/display_stl.js"></script>
+	  <script src="js/three.js"></script>
+
+	  <script src="js/TrackballControls.js"></script>
+	  <script src="js/STLLoader.js"></script>
+	  
+	  <script src="js/Detector.js"></script>
+	  <script src="js/stats.min.js"></script>
+	  <script src="js/display_stl.js"></script>
 
 	</body>
 </html>

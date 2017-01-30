@@ -1,13 +1,21 @@
 
 if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
-var container, stats;
+var container;
 
 // NOTE: cameraTarget will not be needed once trackball controls are used
 var camera, cameraTarget, scene, renderer, controls;
 
 init();
 animate();
+
+function openAttachment() {
+    document.getElementById('attachement').click();
+}
+
+function fileSelected(input){
+    document.getElementById('btnAttachment').value = "File: " + input.files[0].name
+}
 
 function init() {
 
@@ -20,7 +28,7 @@ function init() {
     //cameraTarget = new THREE.Vector3( 0, -0.25, 0 );
 
     controls = new THREE.TrackballControls( camera );
-    controls.rotateSpeed = 1.0;
+    controls.rotateSpeed = 3.0;
     controls.zoomSpeed = 1.2;
     controls.panSpeed = 0.8;
     controls.noZoom = false;
@@ -33,105 +41,14 @@ function init() {
     scene = new THREE.Scene();
 
     var fog_color = 0xfefefe;
-    //scene.fog = new THREE.Fog( fog_color, 2, 15 ); //new THREE.Fog( 0x72645b, 2, 15 );
 
+    var file_name = './models/slotted_disk.stl';
 
-    // Ground
-
-    var plane = new THREE.Mesh(
-	new THREE.PlaneBufferGeometry( 40, 40 ),
-	new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x101010, shininess: 400 } )
-	//new THREE.MeshPhongMaterial( { color: 0xffffff, specular: 0x101010 } )
-    );
-    plane.rotation.x = -Math.PI/2;
-    plane.position.y = -0.5;
-
-    plane.receiveShadow = true;
-
-//    scene.add( plane );
-
-
-
-    // ASCII file
-
-    var loader = new THREE.STLLoader();
-    loader.load( './models/slotted_disk.stl', function ( geometry ) {
-
-	var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 } );
-	var mesh = new THREE.Mesh( geometry, material );
-
-	mesh.position.set( 0, - 0.25, 0.6 );
-	mesh.rotation.set( 0, - Math.PI / 2, 0 );
-	mesh.scale.set( 0.5, 0.5, 0.5 );
-
-	mesh.castShadow = true;
-	mesh.receiveShadow = true;
-
-	scene.add( mesh );
-
-    } );
-
+    load_stl(file_name);
 
     // Binary files
 
-    var file_1 = './models/pr2_head_pan.stl';
-    var file_2 = './models/pr2_head_tilt.stl';
-    var file_3 = './models/colored.stl';
-    var il70_part = './models/IL70\ -\ Case\ -\ Case.stl';
-    
     var material = new THREE.MeshPhongMaterial( { color: 0xAAAAAA, specular: 0x111111, shininess: 200 } );
-
-    loader.load( il70_part, function ( geometry ) {
-
-	var mesh = new THREE.Mesh( geometry, material );
-
-	mesh.position.set( 0, - 0.37, - 0.6 );
-	mesh.rotation.set( - Math.PI / 2, 0, 0 );
-	mesh.scale.set( 2, 2, 2 );
-
-	mesh.castShadow = true;
-	mesh.receiveShadow = true;
-
-	scene.add( mesh );
-
-    } );
-
-    loader.load( file_2, function ( geometry ) {
-
-	var mesh = new THREE.Mesh( geometry, material );
-
-	mesh.position.set( 0.136, - 0.37, - 0.6 );
-	mesh.rotation.set( - Math.PI / 2, 0.3, 0 );
-	mesh.scale.set( 2, 2, 2 );
-
-	mesh.castShadow = true;
-	mesh.receiveShadow = true;
-
-	scene.add( mesh );
-
-    } );
-
-    // Colored binary STL
-    loader.load( file_3, function ( geometry ) {
-
-	var meshMaterial = material;
-	if (geometry.hasColors) {
-	    meshMaterial = new THREE.MeshPhongMaterial({ opacity: geometry.alpha, vertexColors: THREE.VertexColors });
-	}
-
-	var mesh = new THREE.Mesh( geometry, meshMaterial );
-
-	mesh.position.set( 0.5, 0.2, 0 );
-	mesh.rotation.set( - Math.PI / 2, Math.PI / 2, 0 );
-	mesh.scale.set( 0.3, 0.3, 0.3 );
-
-	mesh.castShadow = true;
-	mesh.receiveShadow = true;
-
-	scene.add( mesh );
-
-    } );
-
 
     // Lights
 
@@ -154,13 +71,6 @@ function init() {
     renderer.shadowMap.renderReverseSided = false;
 
     container.appendChild( renderer.domElement );
-
-    // stats
-
-    stats = new Stats();
-    container.appendChild( stats.dom );
-
-    //
 
     window.addEventListener( 'resize', onWindowResize, false );
 
@@ -208,7 +118,6 @@ function animate() {
     requestAnimationFrame( animate );
 
     render();
-    stats.update();
     controls.update();
 
 }
@@ -223,7 +132,29 @@ function render() {
     // camera.lookAt( cameraTarget );
 
     renderer.render( scene, camera );
-    stats.update();
 
 }
 
+function load_stl(file_name) {
+    var loader = new THREE.STLLoader();
+    loader.load( file_name, function ( geometry ) {
+
+	var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 200 } );
+	var mesh = new THREE.Mesh( geometry, material );
+
+	mesh.position.set( 0, - 0.25, 0.6 );
+	mesh.rotation.set( 0, - Math.PI / 2, 0 );
+	mesh.scale.set( 0.5, 0.5, 0.5 );
+
+	mesh.castShadow = true;
+	mesh.receiveShadow = true;
+
+	scene.add( mesh );
+
+	var bb = new THREE.Box3()
+	bb.setFromObject(mesh);
+	bb.center(controls.target);    
+	
+    } );
+
+}
